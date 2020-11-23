@@ -34,11 +34,17 @@ def customSearch(key,value):
 
     jsonstring = js.dumps(temp, default=default)
     data = json.loads(jsonstring)
-    image = data['imUrl']
+    try:
+        image = data['imUrl']
+    except:
+        image = "NOIMAGE"
     print(data)
-    overview = data['description']
+    try:
+        overview = data['description']
+    except:
+        overview = "NOOVERVIEW"
     print(image, overview)
-    return (image or "noimage", overview or "nooverview")
+    return (image  +"####" + overview)
     #except:
      #   return {"Message": "Failed to retrieve data"}, 500
 
