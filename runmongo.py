@@ -49,7 +49,7 @@ def customSearch(key,value):
     except:
         ab = "NOALSOBOUGHT"
     print(image, overview)
-    return (image  +"####" + overview+"####"+ab)
+    return (image  +"####" + overview+"####"+str(ab))
     #except:
      #   return {"Message": "Failed to retrieve data"}, 500
 
