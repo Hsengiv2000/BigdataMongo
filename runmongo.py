@@ -43,8 +43,13 @@ def customSearch(key,value):
         overview = data['description']
     except:
         overview = "NOOVERVIEW"
+    try:
+        ab = data['related']['also_bought']
+        print(ab)
+    except:
+        ab = "NOALSOBOUGHT"
     print(image, overview)
-    return (image  +"####" + overview)
+    return (image  +"####" + overview+"####"+ab)
     #except:
      #   return {"Message": "Failed to retrieve data"}, 500
 
