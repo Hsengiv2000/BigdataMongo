@@ -29,7 +29,8 @@ def customSearch(key,value):
         temp.append(x)
     print(len(temp))
     default_overview = 'Overview not available.'
-
+    if len(temp)==0:
+        return "NOTAVAILABLE####NOTAVAILABLE####NOTAVAILABLE"
     temp =temp[0]
 
     jsonstring = js.dumps(temp, default=default)
