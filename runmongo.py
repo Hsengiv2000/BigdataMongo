@@ -20,6 +20,17 @@ app = flask.Flask(__name__)
 @app.route('/' )
 def  hello_world():
     return 'Hello World'
+@app.route('/rando')
+def rando():
+    tempstring = ""
+    a = metadata.aggregate(
+       [ { '$sample': { 'size': 30 } } ]
+    )
+    for doc in a:
+         tempstring+=doc['asin']+"####"
+#        print(doc)
+    print(tempstring)
+    return tempstring
 @app.route('/<key>/<value>')
 def customSearch(key,value):
     temp = []
@@ -56,3 +67,4 @@ def customSearch(key,value):
 
 if __name__ == "__main__":
     app.run(host = '0.0.0.0' , port=3306)
+
