@@ -20,6 +20,18 @@ app = flask.Flask(__name__)
 @app.route('/' )
 def  hello_world():
     return 'Hello World'
+
+
+@app.route('/titles')
+def titles():
+    a =metadata.find({}, {'title':1})
+    tempstring = ""
+    for doc in a:
+        if(len(doc.keys())) ==2:
+            tempstring+=doc['title']+"####"
+        #print(doc[doc.keys()[0]])
+
+    return tempstring
 @app.route('/rando')
 def rando():
     tempstring = ""
