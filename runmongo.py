@@ -8,6 +8,9 @@ import pymongo
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["kindle"]
 metadata = mydb["metadata"]
+logdb = myclient['logdb']
+logdbcol = logdb['logdbcol']
+
 #for x in metadata.find({"asin":'B0043M6JJW' }):
  #  print(x)
 #print(metadata.find_one()["asin"])
@@ -17,9 +20,34 @@ metadata = mydb["metadata"]
 
 import flask
 app = flask.Flask(__name__)
+@app.route('/getlog')
+def getlog():
+    tempstring=""
+    entries = logdbcol.find()
+    for doc in  entries:
+        print(doc)
+
+        tempstring+=str({x: doc[x] for x in doc if x not in ['_id']})+'\n'
+    return tempstring
+    #return doc #dict(logdbcol.find())
 @app.route('/' )
 def  hello_world():
     return 'Hello World'
+
+@app.route('/log')
+def log():
+
+#(200,POST,addbook,TIMESTAMP)
+    try:
+        code=    request.args.get('code')
+        method = request.args.get('method')
+        function = request.args.get('function')
+        time = request.args.get('time')
+        tempdic = {'code' : code, 'method' : method , 'function': function, 'time':time}
+        logdbcol.insert_one(tempdic)
+        return 'success'
+    except:
+        return 'failure in logging: logging cannot make it'
 
 
 @app.route('/titles')
