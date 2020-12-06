@@ -20,6 +20,24 @@ logdbcol = logdb['logdbcol']
 
 import flask
 app = flask.Flask(__name__)
+
+@app.route('/addbook')
+def addBook():
+
+    try:
+#        code=    request.args.get('code')
+        overview = request.args.get('overview')
+        method = request.args.get('author')
+        function = request.args.get('title')
+        time = request.args.get('time')
+        tempdic = {'asin' : time, 'author' : method , 'title': function , 'description':overview}
+        metadata.insert_one(tempdic)
+        return 'success'
+    except:
+        return 'failure in adding'
+
+
+
 @app.route('/getlog')
 def getlog():
     tempstring=""
