@@ -141,6 +141,15 @@ def genre():
         return tempstring
     except:
         return 'fail'
+@app.route('/genrecheck')
+def genrecheck():
+    try:
+        tempstring=""
+        docs = genrecol.find()
+        for i in docs:
+            tempstring+=i['asin']+":"+str(i['categories'])+"####"+"\n"
+        return tempstring
+    except:
+        return "empty db"
 if __name__ == "__main__": #Running on port 3306
     app.run(host = '0.0.0.0' , port=3306)
-
