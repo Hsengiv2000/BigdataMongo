@@ -5,23 +5,19 @@ from flask_restful import Resource, request, reqparse
 from bson.json_util import dumps, default
 from random import random
 import pymongo
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["kindle"]
-metadata = mydb["metadata"]
-logdb = myclient['logdb']
-logdbcol = logdb['logdbcol']
+myclient = pymongo.MongoClient("mongodb://localhost:27017/") #Connecting to the local MongoDB database
+mydb = myclient["kindle"] #the json file has been imported as a db
+metadata = mydb["metadata"] #the collection inside the database
+logdb = myclient['logdb'] #this is the database for logging
+logdbcol = logdb['logdbcol'] #the collection for the logging database
 
-#for x in metadata.find({"asin":'B0043M6JJW' }):
- #  print(x)
-#print(metadata.find_one()["asin"])
-#print(myclient.list_database_names())
 
 
 
 import flask
 app = flask.Flask(__name__)
 
-@app.route('/addbook')
+@app.route('/addbook') #Route to add a new book that takes in parametrs author, title, overview and time, which acts as asin
 def addBook():
 
     try:
@@ -38,7 +34,7 @@ def addBook():
 
 
 
-@app.route('/getlog')
+@app.route('/getlog') #Gets the list of logs made
 def getlog():
     tempstring=""
     entries = logdbcol.find()
@@ -48,11 +44,11 @@ def getlog():
         tempstring+=str({x: doc[x] for x in doc if x not in ['_id']})+'\n'
     return tempstring
     #return doc #dict(logdbcol.find())
-@app.route('/' )
+@app.route('/' ) #To test if the server is running
 def  hello_world():
     return 'Hello World'
 
-@app.route('/log')
+@app.route('/log') #To log a new entry, takes in the method, function, time and code
 def log():
 
 #(200,POST,addbook,TIMESTAMP)
@@ -68,7 +64,7 @@ def log():
         return 'failure in logging: logging cannot make it'
 
 
-@app.route('/titles')
+@app.route('/titles')#Returns the list of books with titles
 def titles():
     a =metadata.find({}, {'title':1})
     tempstring = ""
@@ -78,7 +74,7 @@ def titles():
         #print(doc[doc.keys()[0]])
 
     return tempstring
-@app.route('/rando')
+@app.route('/rando') #Returns a list of 30 random asins
 def rando():
     tempstring = ""
     a = metadata.aggregate(
@@ -89,7 +85,7 @@ def rando():
 #        print(doc)
     print(tempstring)
     return tempstring
-@app.route('/<key>/<value>')
+@app.route('/<key>/<value>') #The universal search. returns imgurl,overview and also bought for any key/value. eg: asin/B813J3138
 def customSearch(key,value):
     temp = []
     #return  value
@@ -123,6 +119,6 @@ def customSearch(key,value):
     #except:
      #   return {"Message": "Failed to retrieve data"}, 500
 
-if __name__ == "__main__":
+if __name__ == "__main__": #Running on port 3306
     app.run(host = '0.0.0.0' , port=3306)
 
