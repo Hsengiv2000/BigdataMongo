@@ -121,7 +121,7 @@ def customSearch(key,value):
      #   return {"Message": "Failed to retrieve data"}, 500
 
 @app.route('/genre')
-def genre():
+def genre(): #The user can query a genre, this function will return the books available in this genre. It also creates a genredb for this purpose for scalable reasons
     tempstring=""
     count=0
     genre = request.args.get('genre')
@@ -144,7 +144,7 @@ def genre():
         return tempstring
     except:
         return 'fail'
-@app.route('/genrecheck')
+@app.route('/genrecheck') #returns the elements from the genredb just to verify that it is indeed there
 def genrecheck():
     try:
         tempstring=""
