@@ -124,6 +124,7 @@ def customSearch(key,value):
 def genre():
     tempstring=""
     count=0
+    genre = request.args.get('genre')
     try:
         docs = metadata.find({}, {'asin':1, 'categories':1})
         for i in docs:
@@ -134,7 +135,9 @@ def genre():
                 break
             tempdic = {'asin': i['asin'] , 'categories' : [j for k in i['categories'] for j in k]}
         #print(tempdic)
-            tempstring +=  tempdic['asin']+":" + str(tempdic['categories'])+"####"+"\n"
+            print(genre, str(tempdic['categories']))
+            if genre in tempdic['categories']:
+                tempstring +=  tempdic['asin']+"####"+"\n" # + str(tempdic['categories'])+"####"+"\n"
 
             genrecol.insert_one(tempdic)
      #break
