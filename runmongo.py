@@ -11,7 +11,8 @@ metadata = mydb["metadata"] #the collection inside the database
 logdb = myclient['logdb'] #this is the database for logging
 logdbcol = logdb['logdbcol'] #the collection for the logging database
 
-
+genredb = myclient['genredb']
+genrecol = genredb['genrecol']
 
 
 import flask
@@ -119,6 +120,27 @@ def customSearch(key,value):
     #except:
      #   return {"Message": "Failed to retrieve data"}, 500
 
+@app.route('/genre')
+def genre():
+    tempstring=""
+    count=0
+    try:
+        docs = metadata.find({}, {'asin':1, 'categories':1})
+        for i in docs:
+        #for j in  ['asin', 'categories']:
+         #   print(i[j])
+            count+=1
+            if count >30:
+                break
+            tempdic = {'asin': i['asin'] , 'categories' : [j for k in i['categories'] for j in k]}
+        #print(tempdic)
+            tempstring +=  tempdic['asin']+":" + str(tempdic['categories'])+"####"+"\n"
+
+            genrecol.insert_one(tempdic)
+     #break
+        return tempstring
+    except:
+        return 'fail'
 if __name__ == "__main__": #Running on port 3306
     app.run(host = '0.0.0.0' , port=3306)
 
